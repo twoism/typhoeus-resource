@@ -1,9 +1,16 @@
 module Typhoeus
   module ClassMethods
-    # just playing around with ideas here
-    # still need to dig through Typhoeus some more
+    # Allow for renaming of the remote resource
+    # ex: :is_resource => {:resource_name => "collections"}
+    def resource_name
+      unless @remote_defaults[:is_resource].is_a? Hash
+        self.to_s.tableize
+      else
+        @remote_defaults[:is_resource][:resource_name] || self.to_s.tableize
+      end
+    end
+    # Build REST paths and add them as remote methods
     def build_resource_methods
-      resource_name = self.to_s.tableize
       {
         :all => {
           :path => "/#{resource_name}.json",
