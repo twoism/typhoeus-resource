@@ -3,32 +3,33 @@ module Typhoeus
     # just playing around with ideas here
     # still need to dig through Typhoeus some more
     def build_resource_methods
+      resource_name = self.to_s.tableize
       {
         :all => {
-          :path => "/#{self.to_s.tableize}.json",
+          :path => "/#{resource_name}.json",
           :method => :get
         },
           :create => {
-          :path => "/#{self.to_s.tableize}.json",
+          :path => "/#{resource_name}.json",
           :method => :post
         },
         :show => {
-          :path => "/#{self.to_s.tableize}/:id.json",
+          :path => "/#{resource_name}/:id.json",
           :method => :get
         },
         :update => {
-          :path => "/#{self.to_s.tableize}/:id.json",
+          :path => "/#{resource_name}/:id.json",
           :method => :post
         },
         :destroy => {
-          :path => "/#{self.to_s.tableize}/:id.json",
+          :path => "/#{resource_name}/:id.json",
           :method => :delete
         }
       }.each do |m,args|
         define_remote_method m, args
       end
     end
-    
+    # overides Typhoeus::ClassMethods::remote_defaults
     def remote_defaults(options)
       @remote_defaults = options
       build_resource_methods unless options[:is_resource].nil?
