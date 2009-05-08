@@ -17,6 +17,14 @@ class CollectionTest < Test::Unit::TestCase
       end
     end   
     
+    [:all,:create,:show,:update,:destroy].each do |m|
+      should "respond to CRUD (#{m}) method" do
+        assert_equal true, Collection.respond_to?(m)
+      end
+    end
+    
+    # These tests only check that the methods
+    # are being called properly.
     should "should create with params" do
       c = Collection.create(:params => {:name => "Some Collection"})
       assert_match(/\w+/, c["name"])
