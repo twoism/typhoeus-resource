@@ -24,6 +24,9 @@ module Typhoeus
           :path => "/#{resource_name}/:id.json",
           :method => :get
         },
+        # this should be a :put but Typhoeus isn't 
+        # sending params along with :put operations so
+        # :post will have to do for now.
         :update => {
           :path => "/#{resource_name}/:id.json",
           :method => :post
