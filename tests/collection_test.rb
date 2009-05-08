@@ -22,7 +22,7 @@ module Typhoeus
         },
         :update => {
           :path => "/#{self.to_s.tableize}/:id.json",
-          :method => :put
+          :method => :post
         },
         :destroy => {
           :path => "/#{self.to_s.tableize}/:id.json",
@@ -56,13 +56,33 @@ class CollectionTest < Test::Unit::TestCase
 
     should "return be an instance of da same thing" do
       assert_equal @collection, Collection
+    end    
+    
+    should "should return a single collection" do
+      c = @collection.show(:id=>1)
+      assert_match(/\w+/, c["name"])
     end
-   
+    should "should create with params" do
+      c = Collection.create(:params => {:name => "Some Collection"})
+      assert_match(/\w+/, c["name"])
+    end
+    
+    should "should update with params" do
+      c = Collection.update(:id=>1,:params => {:name => "Some Collection"})
+      assert_match(/\w+/, c["name"])
+    end
+    
     should "get some collection action from :all" do
       cols = @collection.all
       cols.each do |c|
-        assert_equal(Hash, c["collection"].class)
+        assert_equal(Hash, c.class)
       end
-    end     
+    end
+    
+    should "should destroy with id 1" do
+      c = Collection.destroy(:id => 1)
+      assert_match(/\w+/, c["name"])
+    end
+    
   end
 end
